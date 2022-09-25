@@ -71,6 +71,7 @@ public class Converter {
             Iterator<String[]> iterator = full.iterator();
             
             /* INSERT YOUR CODE HERE */
+            
             JSONObject JSON_OBJ = new JSONObject();
             JSONArray ROWS = new JSONArray();
             JSONArray COLUMNS = new JSONArray();
@@ -130,6 +131,42 @@ public class Converter {
             CSVWriter csvWriter = new CSVWriter(writer, ',', '"', '\\', "\n");
             
             /* INSERT YOUR CODE HERE */
+            
+            JSONObject JSON_OBJ = (JSONObject)parser.parse(jsonString);
+            JSONArray ROWS = (JSONArray)JSON_OBJ.get("rowHeaders");
+            JSONArray COLUMNS = (JSONArray)JSON_OBJ.get("colHeaders");
+            JSONArray DATA = (JSONArray)JSON_OBJ.get("data");
+            JSONArray STORE;
+            String[] INFO = new String[COLUMNS.size()];
+            
+            for(int i = 0; i < COLUMNS.size(); i++)
+            {
+                
+                INFO[i] = (String)COLUMNS.get(i);
+                
+            }
+            
+            csvWriter.writeNext(INFO);
+            
+            for(int i = 0; i < DATA.size(); i++)
+            {
+                
+                STORE = (JSONArray) DATA.get(i);
+                INFO = new String[STORE.size()+1];
+                INFO[0] = (String) ROWS.get(i);
+                
+                for(int j = 0; j < STORE.size(); j++)
+                {
+                    
+                    INFO[j+1] = Long.toString((long)STORE.get(j));
+                    
+                }
+                
+                csvWriter.writeNext(INFO);
+                
+            }
+            
+            results = writer.toString();
             
         }
         catch(Exception e) { e.printStackTrace(); }
